@@ -1,0 +1,23 @@
+model User {
+  id        Int     @id @default(autoincrement())
+  firstName String  @map("first_name") @db.VarChar(40)
+  lastName  String  @map("last_name") @db.VarChar(40)
+  email     String  @unique @db.VarChar(40)
+  username  String? @db.VarChar(30)
+  role      Role    @default(USER)
+
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  login         Login?
+  refreshTokens RefreshToken[]
+
+  @@map("user")
+}
+
+enum Role {
+  USER
+  ADMIN
+
+  @@map("role")
+}

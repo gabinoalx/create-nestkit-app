@@ -1,0 +1,35 @@
+model RefreshToken {
+  id            Int           @id() @default(autoincrement())
+  userId        Int           @map("user_id")
+  user          User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+  //   deviceName String   @map("device_name")
+  userAgent     String        @map("user_agent")
+  ipAddress     String        @map("ip_address")
+  parentId      Int?          @map("parent_id")
+  parent        RefreshToken? @relation("TokenRotation", fields: [parentId], references: [id], onDelete: SetNull)
+  isRevoked     Boolean       @default(false) @map("is_revoked")
+  revokedAt     DateTime?     @map("revoked_at")
+  revokedReason RevokedReason? @map("revoked_reason")
+  expiresAt     DateTime     @map("expires_at")
+  token         String        @unique
+
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  children RefreshToken[] @relation("TokenRotation")
+
+  @@index([userId])
+  @@index([token])
+  @@index([parentId])
+  @@index([expiresAt])
+  @@map("refresh_token")
+}
+
+enum RevokedReason {
+  LOGOUT
+  PASSWORD_CHANGE
+  SUSPICIOUS
+  ROTATION
+
+  @@map("revoked_reason")
+}

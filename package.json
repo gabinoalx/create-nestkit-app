@@ -1,0 +1,47 @@
+{
+  "name": "create-nestjs-app",
+  "version": "0.1.0",
+  "description": "CLI to scaffold NestJS projects",
+  "author": "Gabino",
+  "license": "MIT",
+  "type": "module",
+  "bin": {
+    "create-nestjs-app": "./dist/cli.js"
+  },
+  "files": [
+    "dist",
+    "templates",
+    "README.md"
+  ],
+  "scripts": {
+    "prod": "pnpm build && node dist/cli.js",
+    "build": "tsup",
+    "build:watch": "tsup --watch",
+    "dev": "tsx --tsconfig tsconfig.json src/cli.ts",
+    "typecheck": "tsc --noEmit",
+    "prepublishOnly": "pnpm typecheck && pnpm build"
+  },
+  "devDependencies": {
+    "@types/fs-extra": "^11.0.4",
+    "@types/node": "^22.19.19",
+    "@types/validate-npm-package-name": "^4.0.2",
+    "tsup": "^8.5.1",
+    "tsx": "^4.19.0",
+    "typescript": "^6.0.3"
+  },
+  "dependencies": {
+    "ts-morph": "^25.0.0",
+    "@clack/prompts": "^1.0.0",
+    "@mrleebo/prisma-ast": "^0.16.0",
+    "execa": "^9.5.2",
+    "fs-extra": "^11.3.0",
+    "validate-npm-package-name": "^8.0.0"
+  },
+  "engines": {
+    "node": ">=20.0.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/usuario/repo.git"
+  }
+}
