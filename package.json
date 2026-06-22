@@ -20,7 +20,7 @@
   ],
   "author": "Gabino",
   "license": "MIT",
-  "homepage": "https://github.com/gabinoalx/create-nestkit#readme",
+  "homepage": "https://github.com/gabinoalx/create-nestkit-app#readme",
   "type": "module",
   "bin": {
     "create-nestkit": "dist/cli.js"
@@ -58,6 +58,6 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/gabinoalx/create-nestkit.git"
+    "url": "git+https://github.com/gabinoalx/create-nestkit-app.git"
   }
 }
