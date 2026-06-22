@@ -47,8 +47,6 @@ pnpm start:dev
 
 ## ¿Qué incluye?
 
-Cada cosa viene **configurada**, no es un import vacío esperando a que sea completetado.
-
 - **NestJS** — con la versión que `@nestjs/cli new` provea en el momento. No congela versiones en un template.
 - **Prisma + `@prisma/adapter-pg`** — `PrismaService` global, pool con `max/min/timeouts` razonables, lifecycle hooks, cliente generado en `src/prisma/generated`. Filtro `PrismaExceptionFilter` que mapea errores conocidos a HTTP status correctos (`P2002 → 409`, `P2025 → 404`, `P2003 → 400`).
 - **Pino logger** — transport custom con pretty-print legible, niveles tipados, redacción de campos sensibles (`password` y los que añadas), integración con `nestjs-pino` y `nestjs-cls`.
@@ -56,19 +54,3 @@ Cada cosa viene **configurada**, no es un import vacío esperando a que sea comp
 - **Auth con JWT** (opcional, en roadmap volverla seleccionable) — access + refresh tokens, rotación con detección de reuse, revocación por familia, Passport strategies (local + JWT + JWT-refresh), cookies `httpOnly` con `sameSite: strict`, hashing con bcrypt + salt.
 - **Path aliases** — `@common/*`, `@config/*`, `@core/*`, `@modules/*`, `@prisma-orm/*`. Configurados en `tsconfig.json`, resueltos por `nest build` sin más config.
 - **Estructura por capas** — `common`, `config`, `core`, `modules`. Separación de responsabilidades desde el primer commit, no después de refactor.
-
-## Por qué no es solo "otro boilerplate"
-
-Hay tres cosas concretas que diferencia esto de un `git clone template`:
-
-1. **No envejece.** Los templates en GitHub que llevan 8 meses sin tocar siguen con `@nestjs/core@9`. Aquí cada `npm create` trae lo último.
-2. **Composición declarativa.** Las features no son carpetas que se copian sin más — declaran qué aportan (deps, env vars, scripts, paths, modificaciones AST) y el CLI detecta colisiones entre features antes de tocar disco.
-3. **Salida formateada.** Lo que genera ts-morph se pasa por Prettier real con el `.prettierrc` del proyecto. El código no parece autogenerado.
-
-## Contribuir
-
-Issues y PRs bienvenidas. Si encuentras algo que un proyecto NestJS "bien hecho" debería traer y no está.
-
-## Licencia
-
-MIT © [Gabino](https://github.com/gabinoalx)
