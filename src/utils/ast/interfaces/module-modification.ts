@@ -1,5 +1,5 @@
-import type { ImportSpec } from "./import-spec";
-import type { ProviderSpec } from "./provider-spec";
+import type { ImportSpec } from './import-spec';
+import type { ProviderSpec } from './provider-spec';
 
 export interface ModuleModification {
   imports?: ImportSpec[];

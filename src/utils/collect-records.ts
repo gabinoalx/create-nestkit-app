@@ -1,13 +1,5 @@
-import type { Feature } from "../interfaces/feature.js";
+import type { Feature } from '../interfaces/feature.js';
 
-/**
- * Combina un campo tipo Record de varias features en un solo objeto,
- * detectando colisiones de claves entre features (lanza error indicando ambas).
- *
- * @param features  Las features a recorrer.
- * @param select    Extrae el Record de una feature (ej. f => f.scripts).
- * @param label     Nombre legible del campo, para el mensaje de error.
- */
 export const collectRecords = <V>(
   features: readonly Feature[],
   select: (feature: Feature) => Readonly<Record<string, V>> | undefined,

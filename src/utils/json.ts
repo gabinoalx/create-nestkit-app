@@ -1,11 +1,11 @@
-import fs from "fs-extra";
+import fs from 'fs-extra';
 
 export const readJson = async (
   jsonPath: string,
 ): Promise<Record<string, any>> => {
   let raw: string;
   try {
-    raw = await fs.readFile(jsonPath, "utf8");
+    raw = await fs.readFile(jsonPath, 'utf8');
   } catch (cause) {
     throw new Error(`No se encontró JSON en ${jsonPath}`, { cause });
   }
@@ -19,7 +19,7 @@ export const readJson = async (
     });
   }
 
-  if (!(typeof parsed === "object" && parsed !== null))
+  if (!(typeof parsed === 'object' && parsed !== null))
     throw new Error(`El JSON en ${jsonPath} no tiene la forma esperada`);
 
   return parsed as Record<string, any>;
@@ -30,5 +30,5 @@ export const writeJson = async (
   json: Record<string, any>,
 ): Promise<void> => {
   const jsonStringified = JSON.stringify(json, null, 2);
-  await fs.outputFile(jsonPath, `${jsonStringified}\n`, "utf8");
+  await fs.outputFile(jsonPath, `${jsonStringified}\n`, 'utf8');
 };

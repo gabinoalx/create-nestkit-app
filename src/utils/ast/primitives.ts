@@ -1,24 +1,19 @@
-//
-// CAPA 1 — Primitivas. ÚNICO archivo que toca la API cruda de ts-morph
-// (SyntaxKind, decoradores, navegación de nodos). Las capas 2 y 3 trabajan
-// en términos de estas funciones, NO de ts-morph directamente. Si ts-morph
-// cambia su API, solo se toca este archivo.
-
 import {
   type SourceFile,
   type Decorator,
   type ObjectLiteralExpression,
   type ArrayLiteralExpression,
   SyntaxKind,
-} from "ts-morph";
-import type { ImportSpec } from "./interfaces/import-spec.js";
-import type { ModuleArrayProperty } from "./interfaces/module-array-property.js";
+  Node,
+} from 'ts-morph';
+import type { ImportSpec } from './interfaces/import-spec.js';
+import type { ModuleArrayProperty } from './interfaces/module-array-property.js';
+import type {
+  IdentifierMatcher,
+  InsertPosition,
+  ObjectMatcher,
+} from './interfaces/insert-position.js';
 
-/**
- * Asegura `import { name } from "moduleSpecifier"` en el archivo.
- * Idempotente: si el import ya existe (mismo módulo), añade solo el named
- * import que falte; si el módulo no está importado, crea la declaración.
- */
 export const ensureImport = (source: SourceFile, spec: ImportSpec): void => {
   const { name, moduleSpecifier } = spec;
 
@@ -41,10 +36,6 @@ export const ensureImport = (source: SourceFile, spec: ImportSpec): void => {
   if (!alreadyNamed) existing.addNamedImport(name);
 };
 
-/**
- * Encuentra el decorador @Module (o el que se pida) de la primera clase del
- * archivo. Lanza errores diagnosticables si la estructura no es la esperada.
- */
 export const getDecorator = (
   source: SourceFile,
   decoratorName: string,
@@ -63,10 +54,6 @@ export const getDecorator = (
   return decorator;
 };
 
-/**
- * Devuelve el objeto de configuración de un decorador, ej. el `{...}` de
- * @Module({...}). Lanza si el decorador no recibe un objeto literal.
- */
 export const getDecoratorConfig = (
   decorator: Decorator,
 ): ObjectLiteralExpression => {
@@ -79,17 +66,12 @@ export const getDecoratorConfig = (
   return arg.asKindOrThrow(SyntaxKind.ObjectLiteralExpression);
 };
 
-/**
- * Localiza (o crea vacío) un array dentro de un objeto de configuración.
- * Ej: el array `imports: [...]` del objeto de @Module. Si la propiedad no
- * existe, la crea como `prop: []` y devuelve el array vacío.
- */
 export const getOrCreateArray = (
   config: ObjectLiteralExpression,
   property: ModuleArrayProperty,
 ): ArrayLiteralExpression => {
   if (!config.getProperty(property))
-    config.addPropertyAssignment({ name: property, initializer: "[]" });
+    config.addPropertyAssignment({ name: property, initializer: '[]' });
 
   const prop = config.getPropertyOrThrow(property);
   const initializer = prop
@@ -102,19 +84,47 @@ export const getOrCreateArray = (
   return initializer.asKindOrThrow(SyntaxKind.ArrayLiteralExpression);
 };
 
-/**
- * Añade un elemento (como texto) a un array si no está ya presente.
- * Idempotente: compara por texto normalizado. Sirve tanto para identificadores
- * simples ("AuthService") como para objetos ("{ provide: X, useClass: Y }").
- */
-export const addToArrayIfMissing = (
+export const addToArrayIfMissing = <
+  M extends IdentifierMatcher | ObjectMatcher,
+>(
   array: ArrayLiteralExpression,
   elementText: string,
+  position: InsertPosition<M> = 'end',
 ): void => {
-  const normalized = elementText.trim();
-  const already = array
-    .getElements()
-    .some((el) => el.getText().trim() === normalized);
+  const elements = array.getElements();
+  if (elements.some((el) => el.getText().trim() === elementText.trim())) return;
 
-  if (!already) array.addElement(normalized);
+  const index = resolveInsertIndex(elements, position);
+  array.insertElement(index, elementText);
+};
+
+export const resolveInsertIndex = <M extends IdentifierMatcher | ObjectMatcher>(
+  elements: readonly Node[],
+  position: InsertPosition<M>,
+): number => {
+  if (position === 'end') return elements.length;
+  if (position === 'start') return 0;
+
+  const matcher = 'after' in position ? position.after : position.before;
+  const refIndex = elements.findIndex((el) => matchElement(el, matcher));
+
+  if (refIndex === -1)
+    throw new Error(
+      `No se encontró el elemento de referencia: ${JSON.stringify(matcher)}`,
+    );
+  return 'after' in position ? refIndex + 1 : refIndex;
+};
+
+const matchElement = (
+  el: Node,
+  matcher: IdentifierMatcher | ObjectMatcher,
+): boolean => {
+  if ('name' in matcher) return el.getText().trim() === matcher.name;
+
+  if (!el.isKind(SyntaxKind.ObjectLiteralExpression)) return false;
+  const prop = el
+    .asKind(SyntaxKind.ObjectLiteralExpression)
+    ?.getProperty(matcher.property);
+  if (!prop?.isKind(SyntaxKind.PropertyAssignment)) return false;
+  return prop.getInitializer()?.getText().trim() === matcher.equals;
 };

@@ -1,9 +1,9 @@
-import fs from "fs-extra";
-import { logger } from "./logger.js";
+import fs from 'fs-extra';
+import { logger } from './logger.js';
 
 export const rollback = async (targetDir: string): Promise<void> => {
   if (!(await fs.pathExists(targetDir))) return;
-  logger.warn("Revirtiendo cambios...");
+  logger.warn('Revirtiendo cambios...');
   try {
     await fs.remove(targetDir);
   } catch {

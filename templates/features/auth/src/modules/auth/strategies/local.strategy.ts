@@ -3,7 +3,7 @@ import { PassportStrategy } from '@nestjs/passport';
 import { Strategy } from 'passport-local';
 import { AuthService } from '../auth.service';
 import type { UserModel } from '@prisma-orm/models';
-import { SIGN_IN_FIELDS } from '@core/const';
+import { SIGN_IN_FIELDS } from '@core/constants';
 
 @Injectable()
 export class LocalStrategy extends PassportStrategy(Strategy) {

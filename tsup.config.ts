@@ -1,10 +1,10 @@
-import { defineConfig } from "tsup";
+import { defineConfig } from 'tsup';
 
 export default defineConfig({
-  entry: ["src/cli.ts"],
-  format: ["esm"],
-  target: "node20",
-  outDir: "dist",
+  entry: ['src/cli.ts'],
+  format: ['esm'],
+  target: 'node20',
+  outDir: 'dist',
   clean: true,
   shims: true,
   banner: {
@@ -12,5 +12,5 @@ export default defineConfig({
     import { createRequire } from 'module';
     const require = createRequire(import.meta.url);`,
   },
-  noExternal: ["@mrleebo/prisma-ast"],
+  noExternal: ['@mrleebo/prisma-ast'],
 });

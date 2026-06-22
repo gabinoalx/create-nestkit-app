@@ -1,12 +1,29 @@
 {
-  "name": "create-nestjs-app",
-  "version": "0.1.0",
-  "description": "CLI to scaffold NestJS projects",
+  "name": "create-nestkit",
+  "version": "0.0.1",
+  "description": "Genera proyectos NestJS robustos en segundos, con las mejores prácticas ya configuradas",
+  "keywords": [
+    "nestjs",
+    "scaffold",
+    "scaffolder",
+    "create-nestjs-app",
+    "nestjs-cli",
+    "nestjs-template",
+    "nestjs-boilerplate",
+    "prisma",
+    "pino",
+    "zod",
+    "typescript",
+    "cli",
+    "generator",
+    "starter"
+  ],
   "author": "Gabino",
   "license": "MIT",
+  "homepage": "https://github.com/gabinoalx/create-nestkit#readme",
   "type": "module",
   "bin": {
-    "create-nestjs-app": "./dist/cli.js"
+    "create-nestkit": "dist/cli.js"
   },
   "files": [
     "dist",
@@ -17,7 +34,6 @@
     "prod": "pnpm build && node dist/cli.js",
     "build": "tsup",
     "build:watch": "tsup --watch",
-    "dev": "tsx --tsconfig tsconfig.json src/cli.ts",
     "typecheck": "tsc --noEmit",
     "prepublishOnly": "pnpm typecheck && pnpm build"
   },
@@ -42,6 +58,6 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/usuario/repo.git"
+    "url": "git+https://github.com/gabinoalx/create-nestkit.git"
   }
 }

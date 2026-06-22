@@ -8,7 +8,7 @@ import { ConfigService } from '@nestjs/config';
 import { EnvConfig } from '@config/envs';
 import { LocalStrategy } from './strategies/local.strategy';
 import { JwtStrategy } from './strategies/jwt.strategy';
-import { JwtRefreshStrategy } from './strategies/jwt-refresh.stategy';
+import { JwtRefreshStrategy } from './strategies/jwt-refresh.strategy';
 import { RefreshTokenService } from './refresh-token.service';
 
 @Module({

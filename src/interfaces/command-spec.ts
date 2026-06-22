@@ -1,5 +1,9 @@
-/** Un comando a ejecutar en el proyecto generado, sin shell (file + args). */
-export interface CommandSpec {
-  file: string; // ej. "npx"
-  args: readonly string[]; // ej. ["--yes", "prisma", "init", "--datasource-provider", "postgresql"]
-}
+export type CommandSpec =
+  | {
+      run: 'dlx';
+      autoConfirm?: boolean;
+      package: string;
+      args?: readonly string[];
+    }
+  | { run: 'script'; script: string; args?: readonly string[] }
+  | { run: 'bin'; file: string; args?: readonly string[] };

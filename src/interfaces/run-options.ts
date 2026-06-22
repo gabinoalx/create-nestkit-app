@@ -1,7 +1,7 @@
 export interface RunOptions {
   cwd: string;
-  timeout?: number; // ms, default 3 minutos
+  timeout?: number;
   env?: Record<string, string>;
-  silent?: boolean; // suprimir output del terminal
-  interactive?: boolean; //
+  silent?: boolean;
+  interactive?: boolean;
 }

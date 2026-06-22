@@ -1,4 +1,4 @@
-import { type PropertyAssignment, SyntaxKind, type Project } from "ts-morph";
+import { type PropertyAssignment, SyntaxKind, type Project } from 'ts-morph';
 
 export const configurePrismaConfig = (
   project: Project,
@@ -24,14 +24,14 @@ export const configurePrismaConfig = (
   );
 
   const schemaProp = configObj.getPropertyOrThrow(
-    "schema",
+    'schema',
   ) as PropertyAssignment;
-  schemaProp.setInitializer('"prisma"');
+  schemaProp.setInitializer("'prisma'");
 
-  const datasourceProp = configObj.getPropertyOrThrow("datasource");
+  const datasourceProp = configObj.getPropertyOrThrow('datasource');
   const urlProp = datasourceProp
     .getFirstDescendantByKindOrThrow(SyntaxKind.ObjectLiteralExpression)
-    .getPropertyOrThrow("url") as PropertyAssignment;
+    .getPropertyOrThrow('url') as PropertyAssignment;
 
-  urlProp.setInitializer("DB_URL");
+  urlProp.setInitializer('DB_URL');
 };
